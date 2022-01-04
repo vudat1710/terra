@@ -1,10 +1,25 @@
 import axios from "axios";
 import { SITE_KEY, DENUMS_TO_TOKEN } from "@constants";
 import logger from "@logger";
+import { Response, NextFunction, Request } from "express";
 import { IWalletUtilities } from "@utilInterfaces/wallet/wallet.utils.interface";
+import { ValidationError } from "express-validation";
 
 export default class WalletUtilities implements IWalletUtilities {
-  async claimTokens(address: string, denom: string): Promise<boolean> {
+  public validateInput(
+    err: any,
+    _request: Request,
+    response: Response,
+    next: NextFunction
+  ) {
+    if (err instanceof ValidationError) {
+      logger.error(err.details.body[0].message);
+      return response.status(err.statusCode).json(err);
+    }
+    next();
+  }
+
+  public async claimTokens(address: string, denom: string): Promise<boolean> {
     try {
       const res = await axios.post(process.env.TERRA_FAUCET_CLAIM, {
         chain_id: process.env.TERRA_CHAIN_ID,

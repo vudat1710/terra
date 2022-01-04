@@ -20,7 +20,8 @@
     "@controllers": "dist/controllers",
     "@routes": "dist/routes",
     "@logger": "dist/logger.js",
-    "@constants": "dist/constants.js"
+    "@constants": "dist/constants.js",
+    "@validations": "dist/validations"
   },
   "dependencies": {
     "@terra-money/terra.js": "^3.0.2",
@@ -37,7 +38,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "express-form-data": "^2.0.14",
-    "express-validator": "^6.14.0",
+    "express-validation": "^3.0.8",
     "http-errors": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "module-alias": "^2.2.2",

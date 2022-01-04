@@ -4,9 +4,11 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import cors from "cors";
 import logger from "@logger";
+import formData from "express-form-data";
 import walletRouter from "@routes/wallet/wallet.route";
 
 const app = express();
+app.use(formData.parse());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());

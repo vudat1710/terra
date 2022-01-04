@@ -17,7 +17,8 @@
       "@utilInterfaces/*": ["util_interfaces/*"],
       "@utils/*": ["utils/*"],
       "@controllers/*": ["controllers/*"],
-      "@routes/*": ["routes/*"]
+      "@routes/*": ["routes/*"],
+      "@validations/*": ["validations/*"]
     }
   },
   "exclude": ["node_modules"],
