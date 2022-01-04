@@ -9,7 +9,7 @@ import * as crypto from "crypto";
 export default class WalletService implements IWalletService {
   private walletUtilsInstance = new WalletUtilities();
 
-  createSeedPhrases(): string {
+  public createSeedPhrases(): string {
     const mnemonic = new MnemonicKey({
       mnemonic: bip39.entropyToMnemonic(crypto.randomBytes(16).toString("hex")),
     });
@@ -17,7 +17,7 @@ export default class WalletService implements IWalletService {
     return mnemonic.mnemonic;
   }
 
-  async createWallet(mnemonicKey: string): Promise<string> {
+  public async createWallet(mnemonicKey: string): Promise<string> {
     const mk = new MnemonicKey({
       mnemonic: mnemonicKey,
     });

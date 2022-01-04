@@ -7,10 +7,13 @@
     "paths": {
       "@connection/terra": ["connections/terra/terra.connection.ts"],
       "@serviceInterfaces/wallet": ["service_interfaces/wallet/wallet.service.interface.ts"],
+      "@services/wallet": ["services/wallet/wallet.service.ts"],
       "@constants": ["constants.ts"],
       "@logger": ["logger.ts"],
       "@utilInterfaces/wallet": ["util_interfaces/wallet/wallet.utils.interfaces.ts"],
-      "@utils/wallet": ["utils/wallet/wallet.utils.ts"]
+      "@utils/wallet": ["utils/wallet/wallet.utils.ts"],
+      "@controllers/wallet": ["controllers/wallet/wallet.controller.ts"],
+      "@routes/wallet": ["routes/wallet/wallet.route.ts"]
     }
   },
   "exclude": ["node_modules"]
