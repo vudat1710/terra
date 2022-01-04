@@ -1,12 +1,13 @@
 import { Router } from "express";
-import WalletController from "@controllers/wallet";
+import WalletController from "@controllers/wallet/wallet.controller";
+import { asyncWrap } from "@utils/async_wrap";
 
 const router = Router();
 const walletControllerInstance = new WalletController();
 router.get(
   "/createseedphrases",
-  walletControllerInstance.createSeedPhrases
+  asyncWrap(walletControllerInstance.createSeedPhrases.bind(walletControllerInstance))
 );
-router.post("/createwallet", walletControllerInstance.createWallet);
+router.post("/createwallet", asyncWrap(walletControllerInstance.createWallet.bind(walletControllerInstance)));
 
 export default router;

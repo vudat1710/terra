@@ -1,20 +1,37 @@
 {
   "compilerOptions": {
     /* Modules */
-    "lib": [ "es2015" ],
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "esModuleInterop": true,
+    "outDir": "dist/",
+    "module": "commonjs",
+    "target": "es2016",
     /* Type Checking */
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@connection/terra": ["connections/terra/terra.connection.ts"],
-      "@serviceInterfaces/wallet": ["service_interfaces/wallet/wallet.service.interface.ts"],
-      "@services/wallet": ["services/wallet/wallet.service.ts"],
+      "@connection/*": ["connections/*"],
+      "@serviceInterfaces/*": ["service_interfaces/*"],
+      "@services/*": ["services/*"],
       "@constants": ["constants.ts"],
       "@logger": ["logger.ts"],
-      "@utilInterfaces/wallet": ["util_interfaces/wallet/wallet.utils.interfaces.ts"],
-      "@utils/wallet": ["utils/wallet/wallet.utils.ts"],
-      "@controllers/wallet": ["controllers/wallet/wallet.controller.ts"],
-      "@routes/wallet": ["routes/wallet/wallet.route.ts"]
+      "@utilInterfaces/*": ["util_interfaces/*"],
+      "@utils/*": ["utils/*"],
+      "@controllers/*": ["controllers/*"],
+      "@routes/*": ["routes/*"]
     }
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "include": ["**/*"],
+  "moduleResolution": "node",
+  "sourceMap": true,
+  "noUnusedLocals": true,
+  "noUnusedParameters": true,
+  "forceConsistentCasingInFileNames": true,
+  "skipLibCheck": true,
+  "pretty": true,
+  "allowUnreachableCode": false,
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true,
+  "types": ["node", "jest", "reflect-metadata"]
+
 }

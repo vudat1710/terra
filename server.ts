@@ -1,14 +1,17 @@
-import * as express from "express";
-import * as bodyParser from "body-parser";
-import * as dotenv from "dotenv";
+import "module-alias/register";
+import express from "express";
+import bodyParser from "body-parser";
+import dotenv from "dotenv";
+import cors from "cors";
 import logger from "@logger";
-import walletRouter from "@routes/wallet";
+import walletRouter from "@routes/wallet/wallet.route";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors())
 
 app.use("/api/wallet", walletRouter);
 

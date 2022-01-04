@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import WalletService from "@services/wallet";
+import WalletService from "@services/wallet/wallet.service";
 
 export default class WalletController {
   private walletServiceInstance: WalletService = new WalletService();
 
   public async createSeedPhrases(request: Request, response: Response) {
-    const mnemonicKey: string = this.walletServiceInstance.createSeedPhrases();
+    const mnemonicKey: string = await this.walletServiceInstance.createSeedPhrases();
 
     response.send({ data: mnemonicKey });
   }

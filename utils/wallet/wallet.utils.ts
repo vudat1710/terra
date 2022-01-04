@@ -1,7 +1,7 @@
 import axios from "axios";
 import { SITE_KEY, DENUMS_TO_TOKEN } from "@constants";
 import logger from "@logger";
-import { IWalletUtilities } from "@utilInterfaces/wallet";
+import { IWalletUtilities } from "@utilInterfaces/wallet/wallet.utils.interface";
 
 export default class WalletUtilities implements IWalletUtilities {
   async claimTokens(address: string, denom: string): Promise<boolean> {
