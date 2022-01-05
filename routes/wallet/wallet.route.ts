@@ -18,5 +18,11 @@ router.post(
     walletControllerInstance.createWallet.bind(walletControllerInstance)
   )
 );
+router.post(
+  "/getbalance",
+  asyncWrap(
+    walletControllerInstance.getAccountBalance.bind(walletControllerInstance)
+  )
+);
 
 export default router;

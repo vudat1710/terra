@@ -18,7 +18,9 @@
       "@utils/*": ["utils/*"],
       "@controllers/*": ["controllers/*"],
       "@routes/*": ["routes/*"],
-      "@validations/*": ["validations/*"]
+      "@validations/*": ["validations/*"],
+      "@models/*": ["api_models/*"],
+      "@data/*": ["data/*"]
     }
   },
   "exclude": ["node_modules"],
