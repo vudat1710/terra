@@ -55,10 +55,9 @@ export default class WalletService implements IWalletService {
     const ratioToUsd = await this.walletUtilsInstance.getUSDTRatioByToken(
       "terra-luna"
     );
-    let holdingCoins = nativeBalance.coins.map(x => ({denom: x.denom, name: x.name}))
-    holdingCoins.push(...cw20Balance.filter(x => x.amount !== "0").map(x => ({denom: x.denom, name: x.name})))
+    const holdingCoins = this.walletUtilsInstance.getHoldingCoins(nativeBalance, cw20Balance)
 
-    // logger.info(`Successfully querying account balance of address: ${address}`);
+    logger.info(`Queried account balance of address: ${address}`);
 
     return {
       native: nativeBalance.coins,

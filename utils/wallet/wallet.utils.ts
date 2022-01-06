@@ -12,9 +12,15 @@ import {
   TCW20Balance,
 } from "@models/wallet/wallet.model";
 import * as fs from "fs";
+import { stringify } from "querystring";
 require("dotenv").config();
 
-const cw20Tokens = JSON.parse(fs.readFileSync("C:\\Users\\daniel.vu\\Desktop\\Terra\\data\\cw20\\tokens.json", 'utf8'));
+const cw20Tokens = JSON.parse(
+  fs.readFileSync(
+    "C:\\Users\\daniel.vu\\Desktop\\Terra\\data\\cw20\\tokens.json",
+    "utf8"
+  )
+);
 const cw20TokensInstance =
   process.env.BLOCKCHAIN_ENV === "testnet"
     ? cw20Tokens.testnet
@@ -107,7 +113,7 @@ export default class WalletUtilities implements IWalletUtilities {
             name: cw20TokensInstance[contractAddresses[i]].name,
             denom: cw20TokensInstance[contractAddresses[i]].symbol,
             amount: res[i].balance,
-            decimals: cw20TokensInstance[contractAddresses[i]].decimals
+            decimals: cw20TokensInstance[contractAddresses[i]].decimals,
           });
         }
 
@@ -118,6 +124,22 @@ export default class WalletUtilities implements IWalletUtilities {
         logger.error("Error happened when fetching cw20 balance.");
         return result;
       });
+  };
+
+  public getHoldingCoins = (
+    nativeBalance: TNativeBalance,
+    cw20Balance: TCW20Balance
+  ): Array<{ denom: string; name: string }> => {
+    let holdingCoins = nativeBalance.coins.map((x) => ({
+      denom: x.denom,
+      name: x.name,
+    }));
+    holdingCoins.push(
+      ...cw20Balance
+        .filter((x) => x.amount !== "0")
+        .map((x) => ({ denom: x.denom, name: x.name }))
+    );
+    return holdingCoins;
   };
 
   public claimTokens = async (

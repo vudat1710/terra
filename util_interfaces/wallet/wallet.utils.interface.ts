@@ -22,4 +22,8 @@ export interface IWalletUtilities {
     walletAddress: string,
     contractAddresses: string[]
   ): Promise<TCW20Balance>;
+  getHoldingCoins(
+    nativeBalance: TNativeBalance,
+    cw20Balance: TCW20Balance
+  ): Array<{ denom: string; name: string }>;
 }
