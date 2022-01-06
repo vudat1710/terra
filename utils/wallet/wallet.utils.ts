@@ -211,6 +211,38 @@ export default class WalletUtilities implements IWalletUtilities {
     }
   };
 
+  public addCW20Token = async (
+    contractAddress: string,
+    amount: string
+  ): Promise<string> => {
+    try {
+      const alice = this.terra.wallet(
+        new MnemonicKey({ mnemonic: ALICE_MNEMONIC })
+      );
+      const execute = new MsgExecuteContract(
+        alice.key.accAddress,
+        contractAddress,
+        {
+          mint: { recipient: alice.key.accAddress, amount: amount },
+        }
+      );
+      const sequence = (
+        await this.terra.auth.accountInfo(alice.key.accAddress)
+      ).getSequenceNumber();
+      const tx = await alice.createAndSignTx({
+        msgs: [execute],
+        sequence: sequence,
+      });
+      const result = await this.terra.tx.broadcast(tx);
+
+      return result.txhash;
+    } catch (err: any) {
+      const loggerMessage: string = err.response.data.message;
+      logger.error(loggerMessage);
+      throw new WalletError(err.response.status, loggerMessage);
+    }
+  };
+
   public transferCW20Token = async (
     recipientAddress: string,
     contractAddress: string,

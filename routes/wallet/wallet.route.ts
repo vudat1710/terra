@@ -7,6 +7,7 @@ import {
   validateGetTokenInfo,
   validateGetAccountBalance,
   validateTransferCW20TokenParams,
+  validateAddCW20TokenParams,
 } from "@validations/wallet/wallet.validation";
 
 const router = Router();
@@ -50,6 +51,13 @@ router.post(
   validateTransferCW20TokenParams,
   asyncWrap(
     walletControllerInstance.transferCW20Token.bind(walletControllerInstance)
+  )
+);
+router.post(
+  "/addcw20token",
+  validateAddCW20TokenParams,
+  asyncWrap(
+    walletControllerInstance.addCW20Token.bind(walletControllerInstance)
   )
 );
 

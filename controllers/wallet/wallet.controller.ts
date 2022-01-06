@@ -59,4 +59,13 @@ export default class WalletController {
     );
     response.send({ data: result });
   };
+
+  public addCW20Token = async (request: Request, response: Response) => {
+    const { contractAddress, amount } = request.body;
+    const result = await this.walletServiceInstance.addCW20Token(
+      contractAddress,
+      amount
+    );
+    response.send({ data: result });
+  };
 }

@@ -103,3 +103,19 @@ export const validateTransferCW20TokenParams = [
     walletUtilitiesInstance.validateInput(err, request, response, next);
   },
 ];
+
+export const validateAddCW20TokenParams = [
+  validate(
+    {
+      body: Joi.object().keys({
+        contractAddress: Joi.string().required(),
+        amount: Joi.string().required(),
+      }),
+    },
+    {},
+    {}
+  ),
+  (err: any, request: Request, response: Response, next: NextFunction) => {
+    walletUtilitiesInstance.validateInput(err, request, response, next);
+  },
+];

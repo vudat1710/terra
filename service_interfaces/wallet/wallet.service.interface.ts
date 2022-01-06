@@ -22,4 +22,5 @@ export interface IWalletService {
     contractAddress: string,
     amount: string
   ): Promise<string>;
+  addCW20Token(contractAddress: string, amount: string): Promise<string>;
 }
