@@ -68,4 +68,17 @@ export default class WalletController {
     );
     response.send({ data: result });
   };
+
+  public getTransactionHistory = async (
+    request: Request,
+    response: Response
+  ) => {
+    const { offset, limit, account } = request.body;
+    const result = await this.walletServiceInstance.getTransactionHistory(
+      offset,
+      limit,
+      account
+    );
+    response.send({ data: result });
+  };
 }

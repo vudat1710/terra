@@ -119,3 +119,20 @@ export const validateAddCW20TokenParams = [
     walletUtilitiesInstance.validateInput(err, request, response, next);
   },
 ];
+
+export const validateGetTransactionHistoryParams = [
+  validate(
+    {
+      body: Joi.object().keys({
+        offset: Joi.number().required(),
+        limit: Joi.number().required(),
+        account: Joi.string().required(),
+      }),
+    },
+    {},
+    {}
+  ),
+  (err: any, request: Request, response: Response, next: NextFunction) => {
+    walletUtilitiesInstance.validateInput(err, request, response, next);
+  },
+];

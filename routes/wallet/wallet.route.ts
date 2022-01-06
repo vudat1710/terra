@@ -8,6 +8,7 @@ import {
   validateGetAccountBalance,
   validateTransferCW20TokenParams,
   validateAddCW20TokenParams,
+  validateGetTransactionHistoryParams,
 } from "@validations/wallet/wallet.validation";
 
 const router = Router();
@@ -58,6 +59,15 @@ router.post(
   validateAddCW20TokenParams,
   asyncWrap(
     walletControllerInstance.addCW20Token.bind(walletControllerInstance)
+  )
+);
+router.post(
+  "/gettransactionhistory",
+  validateGetTransactionHistoryParams,
+  asyncWrap(
+    walletControllerInstance.getTransactionHistory.bind(
+      walletControllerInstance
+    )
   )
 );
 

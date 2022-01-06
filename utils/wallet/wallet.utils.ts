@@ -1,5 +1,10 @@
 import axios from "axios";
-import { SITE_KEY, DENUMS_TO_TOKEN, ALICE_MNEMONIC } from "@constants";
+import {
+  SITE_KEY,
+  DENUMS_TO_TOKEN,
+  ALICE_MNEMONIC,
+  TRANSACTION_HIST_API,
+} from "@constants";
 import logger from "@logger";
 import { Response, NextFunction, Request } from "express";
 import {
@@ -274,6 +279,17 @@ export default class WalletUtilities implements IWalletUtilities {
       logger.error(loggerMessage);
       throw new WalletError(err.response.status, loggerMessage);
     }
+  };
+
+  public getTransactionHistory = async (
+    offset: number,
+    limit: number,
+    account: string
+  ) => {
+    const result = await axios.get(TRANSACTION_HIST_API, {
+      params: { offset: offset, limit: limit, account: account },
+    });
+    return result;
   };
 
   public claimTokens = async (

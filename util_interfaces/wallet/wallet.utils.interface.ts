@@ -41,4 +41,5 @@ export interface IWalletUtilities {
     amount: string
   ): Promise<string>;
   addCW20Token(contractAddress: string, amount: string): Promise<string>;
+  getTransactionHistory(offset: number, limit: number, account: string);
 }
