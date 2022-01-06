@@ -26,4 +26,5 @@ export interface IWalletUtilities {
     nativeBalance: TNativeBalance,
     cw20Balance: TCW20Balance
   ): Array<{ denom: string; name: string }>;
+  createWallet(mnemonicKey: string): Promise<string>;
 }

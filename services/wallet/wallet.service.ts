@@ -1,6 +1,5 @@
 import { MnemonicKey } from "@terra-money/terra.js";
 import { IWalletService } from "@serviceInterfaces/wallet/wallet.service.interface";
-import { terraConnection } from "@connection/terra/terra.connection";
 import {
   TAccountBalance,
   TCW20Balance,
@@ -23,11 +22,7 @@ export default class WalletService implements IWalletService {
   };
 
   public createWallet = async (mnemonicKey: string): Promise<string> => {
-    const mk = new MnemonicKey({
-      mnemonic: mnemonicKey,
-    });
-    const wallet = terraConnection.wallet(mk);
-    const accAddress = wallet.key.accAddress;
+    const accAddress = await this.walletUtilsInstance.createWallet(mnemonicKey);
 
     logger.info(
       `Successfully created a new wallet with address of: ${accAddress}`
@@ -55,7 +50,10 @@ export default class WalletService implements IWalletService {
     const ratioToUsd = await this.walletUtilsInstance.getUSDTRatioByToken(
       "terra-luna"
     );
-    const holdingCoins = this.walletUtilsInstance.getHoldingCoins(nativeBalance, cw20Balance)
+    const holdingCoins = this.walletUtilsInstance.getHoldingCoins(
+      nativeBalance,
+      cw20Balance
+    );
 
     logger.info(`Queried account balance of address: ${address}`);
 
@@ -63,7 +61,7 @@ export default class WalletService implements IWalletService {
       native: nativeBalance.coins,
       cw20: cw20Balance,
       usdRatio: `${ratioToUsd.currentUSDPrice} USD/1 LUNA`,
-      holdingCoins: holdingCoins
+      holdingCoins: holdingCoins,
     };
   };
 }

@@ -2,7 +2,7 @@ import axios from "axios";
 import { SITE_KEY, DENUMS_TO_TOKEN } from "@constants";
 import logger from "@logger";
 import { Response, NextFunction, Request } from "express";
-import { Coins, LCDClient } from "@terra-money/terra.js";
+import { Coins, LCDClient, MnemonicKey } from "@terra-money/terra.js";
 import { IWalletUtilities } from "@utilInterfaces/wallet/wallet.utils.interface";
 import { ValidationError } from "express-validation";
 import { coingeckoAPI } from "@connection/gecko/coin.gecko";
@@ -12,7 +12,6 @@ import {
   TCW20Balance,
 } from "@models/wallet/wallet.model";
 import * as fs from "fs";
-import { stringify } from "querystring";
 require("dotenv").config();
 
 const cw20Tokens = JSON.parse(
@@ -140,6 +139,16 @@ export default class WalletUtilities implements IWalletUtilities {
         .map((x) => ({ denom: x.denom, name: x.name }))
     );
     return holdingCoins;
+  };
+
+  public createWallet = async (mnemonicKey: string): Promise<string> => {
+    const mk = new MnemonicKey({
+      mnemonic: mnemonicKey,
+    });
+    const wallet = this.terra.wallet(mk);
+    const accAddress = wallet.key.accAddress;
+
+    return accAddress;
   };
 
   public claimTokens = async (
