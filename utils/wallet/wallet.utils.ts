@@ -282,14 +282,22 @@ export default class WalletUtilities implements IWalletUtilities {
   };
 
   public getTransactionHistory = async (
-    offset: number,
-    limit: number,
+    offset: string,
+    limit: string,
     account: string
-  ) => {
-    const result = await axios.get(TRANSACTION_HIST_API, {
-      params: { offset: offset, limit: limit, account: account },
-    });
-    return result;
+  ): Promise<any> => {
+    try {
+      const result = await axios.get(TRANSACTION_HIST_API, {
+        params: { offset: offset, limit: limit, account: account },
+      });
+      // console.log(result)
+      return result.data;
+    } catch (err: any) {
+      // console.log(err)
+      const loggerMessage: string = err.response.data.message;
+      logger.error(loggerMessage);
+      throw new WalletError(err.response.status, loggerMessage);
+    }
   };
 
   public claimTokens = async (

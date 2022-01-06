@@ -122,11 +122,15 @@ export default class WalletService implements IWalletService {
   };
 
   public getTransactionHistory = async (
-    offset: number,
-    limit: number,
+    offset: string,
+    limit: string,
     account: string
-  ) => {
-    const result = this.getTransactionHistory(offset, limit, account);
+  ): Promise<any> => {
+    const result = await this.walletUtilsInstance.getTransactionHistory(
+      offset,
+      limit,
+      account
+    );
     logger.info("Get transaction history finished");
     return result;
   };
