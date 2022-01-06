@@ -3,6 +3,8 @@ import {
   TNativeBalance,
   TMarketInfo,
   TCW20Balance,
+  TTokenInfo,
+  TErrorResponse,
 } from "@models/wallet/wallet.model";
 export interface IWalletUtilities {
   claimTokens(address: string, denom: string): Promise<boolean>;
@@ -27,4 +29,5 @@ export interface IWalletUtilities {
     cw20Balance: TCW20Balance
   ): Array<{ denom: string; name: string }>;
   createWallet(mnemonicKey: string): Promise<string>;
+  getTokenInfo(contractAddress: string): Promise<TTokenInfo | TErrorResponse>;
 }

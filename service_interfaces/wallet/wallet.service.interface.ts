@@ -1,4 +1,8 @@
-import { TAccountBalance } from "@models/wallet/wallet.model";
+import {
+  TAccountBalance,
+  TTokenInfo,
+  TErrorResponse,
+} from "@models/wallet/wallet.model";
 
 export interface IWalletService {
   createSeedPhrases(): string;
@@ -7,4 +11,5 @@ export interface IWalletService {
     address: string,
     terraContractAddresses: string[]
   ): Promise<TAccountBalance>;
+  getTokenInfo(contractAddress: string): Promise<TTokenInfo | TErrorResponse>;
 }

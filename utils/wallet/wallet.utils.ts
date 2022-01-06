@@ -6,10 +6,13 @@ import { Coins, LCDClient, MnemonicKey } from "@terra-money/terra.js";
 import { IWalletUtilities } from "@utilInterfaces/wallet/wallet.utils.interface";
 import { ValidationError } from "express-validation";
 import { coingeckoAPI } from "@connection/gecko/coin.gecko";
+import { TTokenInfoResponse, TCW20BalanceResponse } from "./terra.response";
 import {
   TNativeBalance,
   TMarketInfo,
   TCW20Balance,
+  TTokenInfo,
+  TErrorResponse,
 } from "@models/wallet/wallet.model";
 import * as fs from "fs";
 require("dotenv").config();
@@ -95,7 +98,7 @@ export default class WalletUtilities implements IWalletUtilities {
     walletAddress: string,
     contractAddresses: string[]
   ): Promise<TCW20Balance> => {
-    let result: TCW20Balance = [];
+    const result: TCW20Balance = [];
     const promises = [];
     contractAddresses.forEach((address: string) =>
       promises.push(
@@ -105,18 +108,15 @@ export default class WalletUtilities implements IWalletUtilities {
       )
     );
     return Promise.all(promises)
-      .then((res) => {
-        const r = [];
+      .then((res: TCW20BalanceResponse[]) => {
         for (let i = 0; i < res.length; i++) {
-          r.push({
+          result.push({
             name: cw20TokensInstance[contractAddresses[i]].name,
             denom: cw20TokensInstance[contractAddresses[i]].symbol,
             amount: res[i].balance,
             decimals: cw20TokensInstance[contractAddresses[i]].decimals,
           });
         }
-
-        result = r;
         return result;
       })
       .catch((_err: any) => {
@@ -149,6 +149,31 @@ export default class WalletUtilities implements IWalletUtilities {
     const accAddress = wallet.key.accAddress;
 
     return accAddress;
+  };
+
+  public getTokenInfo = async (
+    contractAddress: string
+  ): Promise<TTokenInfo | TErrorResponse> => {
+    try {
+      const tokenInfo: TTokenInfoResponse = await this.terra.wasm.contractQuery(
+        contractAddress,
+        { token_info: {} }
+      );
+
+      return {
+        name: tokenInfo.name,
+        symbol: tokenInfo.symbol,
+        decimals: tokenInfo.decimals,
+        totalSupply: tokenInfo.total_supply,
+      };
+    } catch (err: any) {
+      const loggerMessage = `Error happen when fetching token info for contract address: ${contractAddress}`;
+      logger.error(loggerMessage);
+      return {
+        statusCode: 400,
+        message: loggerMessage,
+      };
+    }
   };
 
   public claimTokens = async (

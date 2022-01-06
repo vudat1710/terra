@@ -3,7 +3,9 @@ import { IWalletService } from "@serviceInterfaces/wallet/wallet.service.interfa
 import {
   TAccountBalance,
   TCW20Balance,
+  TErrorResponse,
   TNativeBalance,
+  TTokenInfo,
 } from "@models/wallet/wallet.model";
 import WalletUtilities from "@utils/wallet/wallet.utils";
 import logger from "@logger";
@@ -63,5 +65,16 @@ export default class WalletService implements IWalletService {
       usdRatio: `${ratioToUsd.currentUSDPrice} USD/1 LUNA`,
       holdingCoins: holdingCoins,
     };
+  };
+
+  public getTokenInfo = async (
+    contractAddress: string
+  ): Promise<TTokenInfo | TErrorResponse> => {
+    const tokenInfo: TTokenInfo | TErrorResponse =
+      await this.walletUtilsInstance.getTokenInfo(contractAddress);
+
+    logger.info(`Queried token info of contract address: ${contractAddress}`);
+
+    return tokenInfo;
   };
 }

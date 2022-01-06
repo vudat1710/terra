@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import WalletService from "@services/wallet/wallet.service";
-import { TAccountBalance } from "@models/wallet/wallet.model";
+import { TAccountBalance, TErrorResponse, TTokenInfo } from "@models/wallet/wallet.model";
 
 export default class WalletController {
   private walletServiceInstance: WalletService = new WalletService();
@@ -28,5 +28,13 @@ export default class WalletController {
         terraContractAddresses
       );
     response.send({ data: balance });
+  };
+
+  public getTokenInfo = async (request: Request, response: Response) => {
+    const { contractAddress } = request.body;
+    const tokenInfo: TTokenInfo | TErrorResponse = await this.walletServiceInstance.getTokenInfo(
+      contractAddress
+    );
+    response.send({ data: tokenInfo });
   };
 }

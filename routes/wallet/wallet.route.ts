@@ -24,5 +24,11 @@ router.post(
     walletControllerInstance.getAccountBalance.bind(walletControllerInstance)
   )
 );
+router.post(
+  "/gettokeninfo",
+  asyncWrap(
+    walletControllerInstance.getTokenInfo.bind(walletControllerInstance)
+  )
+);
 
 export default router;

@@ -24,3 +24,15 @@ export type TMarketInfo = {
   currentUSDPrice: number;
   marketcapRank: number;
 };
+
+export type TTokenInfo = {
+  name: string;
+  symbol: string;
+  decimals: number;
+  totalSupply: number;
+};
+
+export type TErrorResponse = {
+  statusCode: number;
+  message: string;
+};
