@@ -35,4 +35,9 @@ export interface IWalletUtilities {
     amount: { denom: string; amount: string },
     memo?: string
   ): Promise<string>;
+  transferCW20Token(
+    recipientAddress: string,
+    contractAddress: string,
+    amount: string
+  ): Promise<string>;
 }

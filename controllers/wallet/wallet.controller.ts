@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import WalletService from "@services/wallet/wallet.service";
-import { TAccountBalance, TErrorResponse, TTokenInfo } from "@models/wallet/wallet.model";
+import {
+  TAccountBalance,
+  TErrorResponse,
+  TTokenInfo,
+} from "@models/wallet/wallet.model";
 
 export default class WalletController {
   private walletServiceInstance: WalletService = new WalletService();
@@ -32,15 +36,27 @@ export default class WalletController {
 
   public getTokenInfo = async (request: Request, response: Response) => {
     const { contractAddress } = request.body;
-    const tokenInfo: TTokenInfo | TErrorResponse = await this.walletServiceInstance.getTokenInfo(
-      contractAddress
-    );
+    const tokenInfo: TTokenInfo | TErrorResponse =
+      await this.walletServiceInstance.getTokenInfo(contractAddress);
     response.send({ data: tokenInfo });
   };
 
   public transferNativeToken = async (request: Request, response: Response) => {
     const { recipientAddress, amount } = request.body;
-    const result = await this.walletServiceInstance.transferNativeToken(recipientAddress, amount);
+    const result = await this.walletServiceInstance.transferNativeToken(
+      recipientAddress,
+      amount
+    );
     response.send({ data: result });
-  }
+  };
+
+  public transferCW20Token = async (request: Request, response: Response) => {
+    const { recipientAddress, contractAddress, amount } = request.body;
+    const result = await this.walletServiceInstance.transferCW20Token(
+      recipientAddress,
+      contractAddress,
+      amount
+    );
+    response.send({ data: result });
+  };
 }

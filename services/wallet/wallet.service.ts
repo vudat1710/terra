@@ -92,4 +92,19 @@ export default class WalletService implements IWalletService {
 
     return result;
   };
+
+  public transferCW20Token = async (
+    recipientAddress: string,
+    contractAddress: string,
+    amount: string
+  ): Promise<string> => {
+    const result = await this.walletUtilsInstance.transferCW20Token(
+      recipientAddress,
+      contractAddress,
+      amount
+    );
+    logger.info("Transferred cw20 token finished");
+
+    return result;
+  };
 }

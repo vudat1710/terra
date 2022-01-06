@@ -2,7 +2,13 @@ import axios from "axios";
 import { SITE_KEY, DENUMS_TO_TOKEN, ALICE_MNEMONIC } from "@constants";
 import logger from "@logger";
 import { Response, NextFunction, Request } from "express";
-import { Coins, MsgSend, LCDClient, MnemonicKey } from "@terra-money/terra.js";
+import {
+  Coins,
+  MsgSend,
+  LCDClient,
+  MnemonicKey,
+  MsgExecuteContract,
+} from "@terra-money/terra.js";
 import { IWalletUtilities } from "@utilInterfaces/wallet/wallet.utils.interface";
 import { ValidationError } from "express-validation";
 import { coingeckoAPI } from "@connection/gecko/coin.gecko";
@@ -195,8 +201,42 @@ export default class WalletUtilities implements IWalletUtilities {
         memo: memo ? memo : "",
       });
       const result = await this.terra.tx.broadcast(tx);
+      // console.log(alice)
 
-      return result.data;
+      return result.txhash;
+    } catch (err: any) {
+      const loggerMessage: string = err.response.data.message;
+      logger.error(loggerMessage);
+      throw new WalletError(err.response.status, loggerMessage);
+    }
+  };
+
+  public transferCW20Token = async (
+    recipientAddress: string,
+    contractAddress: string,
+    amount: string
+  ): Promise<string> => {
+    try {
+      const alice = this.terra.wallet(
+        new MnemonicKey({ mnemonic: ALICE_MNEMONIC })
+      );
+      const execute = new MsgExecuteContract(
+        alice.key.accAddress,
+        contractAddress,
+        {
+          transfer: { recipient: recipientAddress, amount: amount },
+        }
+      );
+      const sequence = (
+        await this.terra.auth.accountInfo(alice.key.accAddress)
+      ).getSequenceNumber();
+      const tx = await alice.createAndSignTx({
+        msgs: [execute],
+        sequence: sequence,
+      });
+      const result = await this.terra.tx.broadcast(tx);
+
+      return result.txhash;
     } catch (err: any) {
       const loggerMessage: string = err.response.data.message;
       logger.error(loggerMessage);
