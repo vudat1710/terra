@@ -12,4 +12,9 @@ export interface IWalletService {
     terraContractAddresses: string[]
   ): Promise<TAccountBalance>;
   getTokenInfo(contractAddress: string): Promise<TTokenInfo | TErrorResponse>;
+  transferNativeToken(
+    recipientAddress: string,
+    amount: { [key: string]: string },
+    memo?: string
+  ): Promise<string>;
 }

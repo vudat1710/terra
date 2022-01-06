@@ -30,5 +30,11 @@ router.post(
     walletControllerInstance.getTokenInfo.bind(walletControllerInstance)
   )
 );
+router.post(
+  "/transfernative",
+  asyncWrap(
+    walletControllerInstance.transferNativeToken.bind(walletControllerInstance)
+  )
+);
 
 export default router;

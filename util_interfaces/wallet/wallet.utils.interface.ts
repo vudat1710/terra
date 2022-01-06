@@ -30,4 +30,9 @@ export interface IWalletUtilities {
   ): Array<{ denom: string; name: string }>;
   createWallet(mnemonicKey: string): Promise<string>;
   getTokenInfo(contractAddress: string): Promise<TTokenInfo | TErrorResponse>;
+  transferNativeToken(
+    recipientAddress: string,
+    amount: { denom: string; amount: string },
+    memo?: string
+  ): Promise<string>;
 }

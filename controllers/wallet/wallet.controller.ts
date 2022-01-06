@@ -37,4 +37,10 @@ export default class WalletController {
     );
     response.send({ data: tokenInfo });
   };
+
+  public transferNativeToken = async (request: Request, response: Response) => {
+    const { recipientAddress, amount } = request.body;
+    const result = await this.walletServiceInstance.transferNativeToken(recipientAddress, amount);
+    response.send({ data: result });
+  }
 }

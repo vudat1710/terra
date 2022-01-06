@@ -1,8 +1,8 @@
 import axios from "axios";
-import { SITE_KEY, DENUMS_TO_TOKEN } from "@constants";
+import { SITE_KEY, DENUMS_TO_TOKEN, ALICE_MNEMONIC } from "@constants";
 import logger from "@logger";
 import { Response, NextFunction, Request } from "express";
-import { Coins, LCDClient, MnemonicKey } from "@terra-money/terra.js";
+import { Coins, MsgSend, LCDClient, MnemonicKey } from "@terra-money/terra.js";
 import { IWalletUtilities } from "@utilInterfaces/wallet/wallet.utils.interface";
 import { ValidationError } from "express-validation";
 import { coingeckoAPI } from "@connection/gecko/coin.gecko";
@@ -86,7 +86,7 @@ export default class WalletUtilities implements IWalletUtilities {
         total: paginationParams.total,
       };
     } catch (_err: any) {
-      const logMessage: string = `Error happened when fetching native balance of address: ${address}`;
+      const logMessage: string = _err.response.data.message;
       logger.error(logMessage);
       throw new WalletError(_err.response.status, logMessage);
     }
@@ -118,7 +118,7 @@ export default class WalletUtilities implements IWalletUtilities {
         return result;
       })
       .catch((_err: any) => {
-        const logMessage: string = "Error happened when fetching cw20 balance.";
+        const logMessage: string = _err.response.data.message;
         logger.error(logMessage);
         throw new WalletError(_err.response.status, logMessage);
       });
@@ -146,11 +146,12 @@ export default class WalletUtilities implements IWalletUtilities {
         mnemonic: mnemonicKey,
       });
       const wallet = this.terra.wallet(mk);
+
       const accAddress = wallet.key.accAddress;
 
       return accAddress;
     } catch (_err: any) {
-      const loggerMessage: string = "Error happened when creating new wallet.";
+      const loggerMessage: string = _err.response.data.message;
       logger.error(loggerMessage);
       throw new WalletError(_err.response.status, loggerMessage);
     }
@@ -172,7 +173,32 @@ export default class WalletUtilities implements IWalletUtilities {
         totalSupply: tokenInfo.total_supply,
       };
     } catch (err: any) {
-      const loggerMessage = `Error happen when fetching token info for contract address: ${contractAddress}`;
+      const loggerMessage = err.response.data.message;
+      logger.error(loggerMessage);
+      throw new WalletError(err.response.status, loggerMessage);
+    }
+  };
+
+  // perform on ALICE
+  public transferNativeToken = async (
+    recipientAddress: string,
+    amount: { [key: string]: string },
+    memo?: string
+  ): Promise<string> => {
+    try {
+      const alice = this.terra.wallet(
+        new MnemonicKey({ mnemonic: ALICE_MNEMONIC })
+      );
+      const send = new MsgSend(alice.key.accAddress, recipientAddress, amount);
+      const tx = await alice.createAndSignTx({
+        msgs: [send],
+        memo: memo ? memo : "",
+      });
+      const result = await this.terra.tx.broadcast(tx);
+
+      return result.data;
+    } catch (err: any) {
+      const loggerMessage: string = err.response.data.message;
       logger.error(loggerMessage);
       throw new WalletError(err.response.status, loggerMessage);
     }
