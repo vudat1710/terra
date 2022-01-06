@@ -77,4 +77,19 @@ export default class WalletService implements IWalletService {
 
     return tokenInfo;
   };
+
+  public transferNativeToken = async (
+    recipientAddress: string,
+    amount: { [key: string]: string },
+    memo?: string
+  ): Promise<string> => {
+    const result = await this.walletUtilsInstance.transferNativeToken(
+      recipientAddress,
+      amount,
+      memo
+    );
+    logger.info(`Transferred native token finished`);
+
+    return result;
+  };
 }
