@@ -1,31 +1,37 @@
 import "module-alias/register";
 import express from "express";
+import { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import compress from "compression";
 import cors from "cors";
 import logger from "@logger";
+import { WalletError } from "@errors/wallet.error";
 import walletRouter from "@routes/wallet/wallet.route";
 
 const app = express();
-app.use(compress());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors())
+app.use(cors());
 
 app.use("/api/wallet", walletRouter);
 
-// app.use((err: any, req: any, res: any) => {
-//   // set locals, only providing error in development
-//   if (err.message) {
-//     res.locals.message = err.message;
-//     res.locals.error = process.env.NODE_ENV === "development" ? err : {};
-//     res.status(err.status || 500);
-//     res.render("error");
-//   }
-// });
+app.use(function onError(
+  err: WalletError,
+  _req: Request,
+  res: Response,
+  _: NextFunction
+) {
+  if (err.message) {
+    logger.error(err.message);
+    return res
+      .status(err.code)
+      .send({ errorCode: err.code, message: err.message });
+  } else {
+    return res.sendStatus(err.code);
+  }
+});
 
 dotenv.config();
 const PORT = process.env.PORT || 8080;

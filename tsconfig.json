@@ -20,7 +20,8 @@
       "@routes/*": ["routes/*"],
       "@validations/*": ["validations/*"],
       "@models/*": ["api_models/*"],
-      "@data/*": ["data/*"]
+      "@data/*": ["data/*"],
+      "@errors/*": ["errors/*"]
     }
   },
   "exclude": ["node_modules"],

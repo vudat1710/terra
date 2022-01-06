@@ -23,7 +23,8 @@
     "@constants": "dist/constants.js",
     "@validations": "dist/validations",
     "@models": "dist/api_models",
-    "@data": "dist/data"
+    "@data": "dist/data",
+    "@errors": "dist/errors"
   },
   "dependencies": {
     "@terra-money/terra.js": "^3.0.2",
@@ -33,7 +34,6 @@
     "bcryptjs": "^2.4.3",
     "bip39": "^3.0.4",
     "body-parser": "^1.19.0",
-    "compression": "^1.7.4",
     "concurrently": "^5.3.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",

@@ -15,6 +15,7 @@ import {
   TErrorResponse,
 } from "@models/wallet/wallet.model";
 import * as fs from "fs";
+import { WalletError } from "@errors/wallet.error";
 require("dotenv").config();
 
 const cw20Tokens = JSON.parse(
@@ -85,12 +86,9 @@ export default class WalletUtilities implements IWalletUtilities {
         total: paginationParams.total,
       };
     } catch (_err: any) {
-      logger.error("Invalid address.");
-      return {
-        coins: [],
-        nextKey: "",
-        total: 0,
-      };
+      const logMessage: string = `Error happened when fetching native balance of address: ${address}`;
+      logger.error(logMessage);
+      throw new WalletError(_err.response.status, logMessage);
     }
   };
 
@@ -120,8 +118,9 @@ export default class WalletUtilities implements IWalletUtilities {
         return result;
       })
       .catch((_err: any) => {
-        logger.error("Error happened when fetching cw20 balance.");
-        return result;
+        const logMessage: string = "Error happened when fetching cw20 balance.";
+        logger.error(logMessage);
+        throw new WalletError(_err.response.status, logMessage);
       });
   };
 
@@ -142,13 +141,19 @@ export default class WalletUtilities implements IWalletUtilities {
   };
 
   public createWallet = async (mnemonicKey: string): Promise<string> => {
-    const mk = new MnemonicKey({
-      mnemonic: mnemonicKey,
-    });
-    const wallet = this.terra.wallet(mk);
-    const accAddress = wallet.key.accAddress;
+    try {
+      const mk = new MnemonicKey({
+        mnemonic: mnemonicKey,
+      });
+      const wallet = this.terra.wallet(mk);
+      const accAddress = wallet.key.accAddress;
 
-    return accAddress;
+      return accAddress;
+    } catch (_err: any) {
+      const loggerMessage: string = "Error happened when creating new wallet.";
+      logger.error(loggerMessage);
+      throw new WalletError(_err.response.status, loggerMessage);
+    }
   };
 
   public getTokenInfo = async (
@@ -169,10 +174,7 @@ export default class WalletUtilities implements IWalletUtilities {
     } catch (err: any) {
       const loggerMessage = `Error happen when fetching token info for contract address: ${contractAddress}`;
       logger.error(loggerMessage);
-      return {
-        statusCode: 400,
-        message: loggerMessage,
-      };
+      throw new WalletError(err.response.status, loggerMessage);
     }
   };
 
