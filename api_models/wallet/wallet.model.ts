@@ -16,6 +16,8 @@ export type TCW20Balance = TCoinInfo;
 export type TAccountBalance = {
   native: TCoinInfo;
   cw20: TCoinInfo;
+  usdRatio: string;
+  holdingCoins: Array<{ denom: string; name: string }>;
 };
 
 export type TMarketInfo = {

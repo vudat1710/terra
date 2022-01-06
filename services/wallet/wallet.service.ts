@@ -52,12 +52,19 @@ export default class WalletService implements IWalletService {
         address,
         terraContractAddresses
       );
+    const ratioToUsd = await this.walletUtilsInstance.getUSDTRatioByToken(
+      "terra-luna"
+    );
+    let holdingCoins = nativeBalance.coins.map(x => ({denom: x.denom, name: x.name}))
+    holdingCoins.push(...cw20Balance.filter(x => x.amount !== "0").map(x => ({denom: x.denom, name: x.name})))
 
     // logger.info(`Successfully querying account balance of address: ${address}`);
 
     return {
       native: nativeBalance.coins,
       cw20: cw20Balance,
+      usdRatio: `${ratioToUsd.currentUSDPrice} USD/1 LUNA`,
+      holdingCoins: holdingCoins
     };
   };
 }

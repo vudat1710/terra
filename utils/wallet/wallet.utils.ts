@@ -11,9 +11,10 @@ import {
   TMarketInfo,
   TCW20Balance,
 } from "@models/wallet/wallet.model";
-import { cw20Tokens } from "@data/cw20/tokens";
+import * as fs from "fs";
 require("dotenv").config();
 
+const cw20Tokens = JSON.parse(fs.readFileSync("C:\\Users\\daniel.vu\\Desktop\\Terra\\data\\cw20\\tokens.json", 'utf8'));
 const cw20TokensInstance =
   process.env.BLOCKCHAIN_ENV === "testnet"
     ? cw20Tokens.testnet
@@ -69,7 +70,7 @@ export default class WalletUtilities implements IWalletUtilities {
             name: DENUMS_TO_TOKEN[m.denom],
             denom: m.denom,
             amount: m.amount,
-            decimals: 6
+            decimals: 6,
           };
         }),
         nextKey: paginationParams.next_key,
@@ -106,6 +107,7 @@ export default class WalletUtilities implements IWalletUtilities {
             name: cw20TokensInstance[contractAddresses[i]].name,
             denom: cw20TokensInstance[contractAddresses[i]].symbol,
             amount: res[i].balance,
+            decimals: cw20TokensInstance[contractAddresses[i]].decimals
           });
         }
 
