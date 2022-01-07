@@ -184,7 +184,7 @@ export default class WalletUtilities implements IWalletUtilities {
   // perform on ALICE
   public transferNativeToken = async (
     recipientAddress: string,
-    amount: { [key: string]: string },
+    amount: { [key: string]: number },
     memo?: string
   ): Promise<string> => {
     try {
@@ -209,7 +209,7 @@ export default class WalletUtilities implements IWalletUtilities {
 
   public addCW20Token = async (
     contractAddress: string,
-    amount: string
+    amount: number
   ): Promise<string> => {
     try {
       const alice = terraConnection.wallet(
@@ -242,7 +242,7 @@ export default class WalletUtilities implements IWalletUtilities {
   public transferCW20Token = async (
     recipientAddress: string,
     contractAddress: string,
-    amount: string
+    amount: number
   ): Promise<string> => {
     try {
       const alice = terraConnection.wallet(

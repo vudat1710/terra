@@ -66,12 +66,17 @@ export const validateTransferNativeTokenParams = [
       body: Joi.object().keys({
         recipientAddress: Joi.string().required(),
         memo: Joi.string(),
-        amount: Joi.object().custom((v: { [key: string]: string }, helper) => {
+        amount: Joi.object().custom((v: { [key: string]: number }, helper) => {
           const keys: string[] = Object.keys(v);
           for (let i = 0; i < keys.length; i++) {
-            if (!denomsList.includes(Object.keys(v)[i])) {
+            if (!denomsList.includes(keys[i])) {
               return helper.message({
                 custom: "Token not in native token list.",
+              });
+            }
+            if (typeof v[keys[i]] !== "number") {
+              return helper.message({
+                custom: "Token amount must be number type.",
               });
             }
           }
@@ -93,7 +98,7 @@ export const validateTransferCW20TokenParams = [
       body: Joi.object().keys({
         recipientAddress: Joi.string().required(),
         contractAddress: Joi.string().required(),
-        amount: Joi.string().required(),
+        amount: Joi.number().required(),
       }),
     },
     {},
@@ -109,7 +114,7 @@ export const validateAddCW20TokenParams = [
     {
       body: Joi.object().keys({
         contractAddress: Joi.string().required(),
-        amount: Joi.string().required(),
+        amount: Joi.number().required(),
       }),
     },
     {},

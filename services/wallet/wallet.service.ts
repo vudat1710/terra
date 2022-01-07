@@ -80,7 +80,7 @@ export default class WalletService implements IWalletService {
 
   public transferNativeToken = async (
     recipientAddress: string,
-    amount: { [key: string]: string },
+    amount: { [key: string]: number },
     memo?: string
   ): Promise<string> => {
     const result = await this.walletUtilsInstance.transferNativeToken(
@@ -96,7 +96,7 @@ export default class WalletService implements IWalletService {
   public transferCW20Token = async (
     recipientAddress: string,
     contractAddress: string,
-    amount: string
+    amount: number
   ): Promise<string> => {
     const result = await this.walletUtilsInstance.transferCW20Token(
       recipientAddress,
@@ -110,7 +110,7 @@ export default class WalletService implements IWalletService {
 
   public addCW20Token = async (
     contractAddress: string,
-    amount: string
+    amount: number
   ): Promise<string> => {
     const result = await this.walletUtilsInstance.addCW20Token(
       contractAddress,

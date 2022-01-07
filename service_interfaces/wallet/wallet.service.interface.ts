@@ -14,15 +14,15 @@ export interface IWalletService {
   getTokenInfo(contractAddress: string): Promise<TTokenInfo | TErrorResponse>;
   transferNativeToken(
     recipientAddress: string,
-    amount: { [key: string]: string },
+    amount: { [key: string]: number },
     memo?: string
   ): Promise<string>;
   transferCW20Token(
     recipientAddress: string,
     contractAddress: string,
-    amount: string
+    amount: number
   ): Promise<string>;
-  addCW20Token(contractAddress: string, amount: string): Promise<string>;
+  addCW20Token(contractAddress: string, amount: number): Promise<string>;
   getTransactionHistory(
     offset: string,
     limit: string,
