@@ -64,10 +64,10 @@ require("dotenv").config();
       codeId as unknown as number,
       initMsg
     );
-    const stdFee = new Fee(1000000, "2000000uluna");
+    // const stdFee = new Fee(1000000, "2000000uluna");
     const tx = await deployer.createAndSignTx({
       msgs: [instantiate],
-      fee: stdFee,
+      // fee: stdFee,
       sequence: sequence,
     });
     const result = await terra.tx.broadcast(tx);
@@ -87,10 +87,10 @@ require("dotenv").config();
       contractAddress,
       executeMsg
     );
-    const stdFee = new Fee(1000000, "2000000uluna");
+    // const stdFee = new Fee(1000000, "2000000uluna");
     const tx = await sender.createAndSignTx({
       msgs: [execute],
-      fee: stdFee,
+      // fee: stdFee,
       sequence: sequence,
     });
     const result = await terra.tx.broadcast(tx);
@@ -117,6 +117,7 @@ require("dotenv").config();
     },
     sequence + 1
   );
+  console.log(contractAddress)
 
   await executeContract(
     deployer,

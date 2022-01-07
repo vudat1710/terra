@@ -25,3 +25,5 @@ export const LOGFILE = "api.log";
 export const ALICE_MNEMONIC =
   "fit once session entire grocery blossom glad repair trouble fury subway solid climb couple turtle cradle bread lemon approve note warm insane nurse emotion";
 export const TRANSACTION_HIST_API = "https://bombay-fcd.terra.dev/v1/txs";
+export const EXAMPLE_CW20_TOKEN =
+  "terra1s9vn6zjy7nwzv99ltuzly3mma58hj58rpa40wy";
