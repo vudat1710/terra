@@ -191,6 +191,12 @@ export default class WalletUtilities implements IWalletUtilities {
       const alice = terraConnection.wallet(
         new MnemonicKey({ mnemonic: ALICE_MNEMONIC })
       );
+      if (alice.key.accAddress === recipientAddress) {
+        throw new WalletError(
+          400,
+          "Sender and recipient addresses should not be the same"
+        );
+      }
       const send = new MsgSend(alice.key.accAddress, recipientAddress, amount);
       const tx = await alice.createAndSignTx({
         msgs: [send],
@@ -248,6 +254,12 @@ export default class WalletUtilities implements IWalletUtilities {
       const alice = terraConnection.wallet(
         new MnemonicKey({ mnemonic: ALICE_MNEMONIC })
       );
+      if (alice.key.accAddress === recipientAddress) {
+        throw new WalletError(
+          400,
+          "Sender and recipient addresses should not be the same"
+        );
+      }
       const execute = new MsgExecuteContract(
         alice.key.accAddress,
         contractAddress,

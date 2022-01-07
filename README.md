@@ -22,3 +22,4 @@
 - List of CW20 tokens can be updated (not necessarily regularly) using the `get_cw20_token` script: `$ yarn run get-cw20-tokens`
 - In order to add a new token into Terra's testnet, you can use `contract` script: `$ yarn run contract`. You can also change some information inside in order to create a new token at will
 - Get balance and get holding tokens requirements are integrated into 1 API called /getbalance
+- Example CW20 token can be found in constants file (in order to perform transferring CW20 token)
