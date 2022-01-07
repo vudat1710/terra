@@ -10,7 +10,8 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "start": "nodemon ./dist/server.js",
     "dev": "nodemon server.ts",
-    "contract": "ts-node-dev --respawn --transpile-only .\\scripts\\contract.ts"
+    "contract": "ts-node-dev --respawn --transpile-only .\\scripts\\contract.ts",
+    "get-cw20-tokens": "ts-node-dev --respawn --transpile-only .\\data\\cw20\\get_cw20_tokens.ts"
   },
   "_moduleAliases": {
     "@connection": "dist/connections",

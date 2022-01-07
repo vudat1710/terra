@@ -10,7 +10,6 @@ import { Response, NextFunction, Request } from "express";
 import {
   Coins,
   MsgSend,
-  LCDClient,
   MnemonicKey,
   MsgExecuteContract,
 } from "@terra-money/terra.js";
@@ -27,23 +26,15 @@ import {
 } from "@models/wallet/wallet.model";
 import * as fs from "fs";
 import { WalletError } from "@errors/wallet.error";
+import { terraConnection } from "@connection/terra/terra.connection";
 require("dotenv").config();
 
-const cw20Tokens = JSON.parse(
-  fs.readFileSync(
-    "C:\\Users\\daniel.vu\\Desktop\\Terra\\data\\cw20\\tokens.json",
-    "utf8"
-  )
-);
+const cw20Tokens = JSON.parse(fs.readFileSync(".\\tokens.json", "utf8"));
 const cw20TokensInstance =
   process.env.BLOCKCHAIN_ENV === "testnet"
     ? cw20Tokens.testnet
     : cw20Tokens.mainnet;
 export default class WalletUtilities implements IWalletUtilities {
-  private terra = new LCDClient({
-    URL: process.env.TERRA_NODE_URL,
-    chainID: process.env.TERRA_CHAIN_ID,
-  });
   public validateInput = (
     err: any,
     _request: Request,
@@ -79,7 +70,7 @@ export default class WalletUtilities implements IWalletUtilities {
     address: string
   ): Promise<TNativeBalance> => {
     try {
-      const balance = await this.terra.bank.balance(address);
+      const balance = await terraConnection.bank.balance(address);
       const coinList: Coins = balance[0];
 
       const paginationParams = balance[1];
@@ -111,7 +102,7 @@ export default class WalletUtilities implements IWalletUtilities {
     const promises = [];
     contractAddresses.forEach((address: string) =>
       promises.push(
-        this.terra.wasm.contractQuery(address, {
+        terraConnection.wasm.contractQuery(address, {
           balance: { address: walletAddress },
         })
       )
@@ -156,7 +147,7 @@ export default class WalletUtilities implements IWalletUtilities {
       const mk = new MnemonicKey({
         mnemonic: mnemonicKey,
       });
-      const wallet = this.terra.wallet(mk);
+      const wallet = terraConnection.wallet(mk);
 
       const accAddress = wallet.key.accAddress;
 
@@ -172,10 +163,10 @@ export default class WalletUtilities implements IWalletUtilities {
     contractAddress: string
   ): Promise<TTokenInfo | TErrorResponse> => {
     try {
-      const tokenInfo: TTokenInfoResponse = await this.terra.wasm.contractQuery(
-        contractAddress,
-        { token_info: {} }
-      );
+      const tokenInfo: TTokenInfoResponse =
+        await terraConnection.wasm.contractQuery(contractAddress, {
+          token_info: {},
+        });
 
       return {
         name: tokenInfo.name,
@@ -197,7 +188,7 @@ export default class WalletUtilities implements IWalletUtilities {
     memo?: string
   ): Promise<string> => {
     try {
-      const alice = this.terra.wallet(
+      const alice = terraConnection.wallet(
         new MnemonicKey({ mnemonic: ALICE_MNEMONIC })
       );
       const send = new MsgSend(alice.key.accAddress, recipientAddress, amount);
@@ -205,7 +196,7 @@ export default class WalletUtilities implements IWalletUtilities {
         msgs: [send],
         memo: memo ? memo : "",
       });
-      const result = await this.terra.tx.broadcast(tx);
+      const result = await terraConnection.tx.broadcast(tx);
       // console.log(alice)
 
       return result.txhash;
@@ -221,7 +212,7 @@ export default class WalletUtilities implements IWalletUtilities {
     amount: string
   ): Promise<string> => {
     try {
-      const alice = this.terra.wallet(
+      const alice = terraConnection.wallet(
         new MnemonicKey({ mnemonic: ALICE_MNEMONIC })
       );
       const execute = new MsgExecuteContract(
@@ -232,13 +223,13 @@ export default class WalletUtilities implements IWalletUtilities {
         }
       );
       const sequence = (
-        await this.terra.auth.accountInfo(alice.key.accAddress)
+        await terraConnection.auth.accountInfo(alice.key.accAddress)
       ).getSequenceNumber();
       const tx = await alice.createAndSignTx({
         msgs: [execute],
         sequence: sequence,
       });
-      const result = await this.terra.tx.broadcast(tx);
+      const result = await terraConnection.tx.broadcast(tx);
 
       return result.txhash;
     } catch (err: any) {
@@ -254,7 +245,7 @@ export default class WalletUtilities implements IWalletUtilities {
     amount: string
   ): Promise<string> => {
     try {
-      const alice = this.terra.wallet(
+      const alice = terraConnection.wallet(
         new MnemonicKey({ mnemonic: ALICE_MNEMONIC })
       );
       const execute = new MsgExecuteContract(
@@ -265,13 +256,13 @@ export default class WalletUtilities implements IWalletUtilities {
         }
       );
       const sequence = (
-        await this.terra.auth.accountInfo(alice.key.accAddress)
+        await terraConnection.auth.accountInfo(alice.key.accAddress)
       ).getSequenceNumber();
       const tx = await alice.createAndSignTx({
         msgs: [execute],
         sequence: sequence,
       });
-      const result = await this.terra.tx.broadcast(tx);
+      const result = await terraConnection.tx.broadcast(tx);
 
       return result.txhash;
     } catch (err: any) {

@@ -1,4 +1,4 @@
-// import axios from "axios";
+require("dotenv").config();
 import * as fs from "fs";
 import { LCDClient } from "@terra-money/terra.js";
 import axios from "axios";
@@ -53,7 +53,7 @@ import axios from "axios";
     }
     // console.log(result);
     // write JSON string to a file
-    fs.writeFile("./tokens.json", JSON.stringify(result), (err) => {
+    fs.writeFile(".\\tokens.json", JSON.stringify(result), (err) => {
       if (err) {
         throw err;
       }
