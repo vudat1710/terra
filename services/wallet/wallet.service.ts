@@ -8,6 +8,7 @@ import {
   TTokenInfo,
 } from "@models/wallet/wallet.model";
 import WalletUtilities from "@utils/wallet/wallet.utils";
+import { DROP_ADDRESS } from "@constants";
 import logger from "@logger";
 import * as bip39 from "bip39";
 import * as crypto from "crypto";
@@ -30,10 +31,11 @@ export default class WalletService implements IWalletService {
       `Successfully created a new wallet with address of: ${accAddress}`
     );
 
-    // request an airdrop to perform transactions if current env is testnet
     if (process.env.BLOCKCHAIN_ENV == "testnet")
       //native tokens can be dropped: uluna, uusd, ueur, usdr, ukrw (need captcha)
-      await this.walletUtilsInstance.claimTokens(accAddress, "uluna");
+      await this.walletUtilsInstance.transferNativeToken(DROP_ADDRESS, {
+        uluna: 10000000,
+      });
 
     return accAddress;
   };

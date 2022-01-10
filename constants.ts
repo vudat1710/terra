@@ -27,3 +27,4 @@ export const ALICE_MNEMONIC =
 export const TRANSACTION_HIST_API = "https://bombay-fcd.terra.dev/v1/txs";
 export const EXAMPLE_CW20_TOKEN =
   "terra1s9vn6zjy7nwzv99ltuzly3mma58hj58rpa40wy";
+export const DROP_ADDRESS = "terra1ya924uz6g22futpfq0nlej0wpfkv5fdam2sag7";
